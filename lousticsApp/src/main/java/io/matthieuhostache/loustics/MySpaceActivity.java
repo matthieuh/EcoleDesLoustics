@@ -1,5 +1,7 @@
 package io.matthieuhostache.loustics;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,21 +12,57 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MySpaceActivity extends ActionBarActivity {
+
+    private ImageView childPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_space);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        childPic = (ImageView)findViewById(R.id.childPic);
+
+        String picChild = getIntent().getExtras().getString("picChild");
+        System.out.println("picChild : " + picChild);
+
+        Bitmap image = BitmapFactory.decodeFile(picChild);
+        childPic.setImageBitmap(image);
+
+        initCategories();
+
     }
 
+    public void initCategories() {
+        List<HashMap<String, String>> listCategories = new ArrayList<HashMap<String, String>>();
+        ListView categoriesList = (ListView) findViewById(R.id.categoriesList);
+
+        HashMap<String, String> map;
+        map = new HashMap<String, String>();
+        map.put("cat_image", String.valueOf(R.drawable.matieres));
+        map.put("cat_name", "Apprendre");
+        map.put("cat_number", "");
+        listCategories.add(map);
+
+        map = new HashMap<String, String>();
+        map.put("cat_image", String.valueOf(R.drawable.games));
+        map.put("cat_name", "Jeux débloqués");
+        map.put("cat_number", "( 0 )");
+        listCategories.add(map);
+
+        ListAdapter adapter = new SimpleAdapter(this, listCategories, R.layout.view_category, new String[] {"cat_image","cat_name","cat_number"},
+                new int[] {R.id.cat_image,R.id.cat_name,R.id.cat_number });
+        categoriesList.setAdapter(adapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,5 +1,6 @@
 package io.matthieuhostache.loustics;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -25,6 +27,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private ImageButton createNewChild;
+    private  ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         createNewChild = (ImageButton) findViewById(R.id.imageButton);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
 
         List<HashMap<String, ?>> childrenList = new ArrayList<HashMap<String, ?>>();
         ChildDB childDB = new ChildDB(this);
@@ -46,8 +49,21 @@ public class MainActivity extends ActionBarActivity {
         listView.setAdapter(adapter);
         childDB.close();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                HashMap<String, String> map = (HashMap<String, String>) listView.getItemAtPosition(position);
+
+                Intent MySpaceActivityIntent = new Intent(MainActivity.this, MySpaceActivity.class);
+                String picChild = map.get("Pic");
+                MySpaceActivityIntent.putExtra("picChild",picChild);
+                startActivityForResult(MySpaceActivityIntent, 1);
+            }
+        });
+
         createNewChild.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+
                 Intent AddChildActivityIntent = new Intent(MainActivity.this, AddChildActivity.class);
                 startActivityForResult(AddChildActivityIntent, 1);
             }
