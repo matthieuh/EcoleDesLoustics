@@ -17,6 +17,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
 
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp" />
+
     <ImageButton
         android:layout_width="175dp"
         android:layout_height="wrap_content"
@@ -24,6 +29,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.05"
         android:src="@drawable/addchild" />
+
 
 
 

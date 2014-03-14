@@ -5,25 +5,23 @@ package io.matthieuhostache.loustics;
  */
 public class Child {
 
-    private static int increment = 0;
+
     private int id;
     private String picPath;
 
     public Child(){
-        id = ++increment;
     }
 
     public Child(String picPath){
-        id = ++increment;
         this.picPath = picPath;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPicPath() {

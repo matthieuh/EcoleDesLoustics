@@ -12,8 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ImageButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -25,6 +32,19 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         createNewChild = (ImageButton) findViewById(R.id.imageButton);
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+        List<HashMap<String, ?>> childrenList = new ArrayList<HashMap<String, ?>>();
+        ChildDB childDB = new ChildDB(this);
+        childDB.open();
+
+        childrenList.addAll(childDB.getChildren());
+        System.out.println("childrenList : "+ childrenList);
+
+        ListAdapter adapter = new SimpleAdapter(this, childrenList, R.layout.view_child, new String[] {"Id","Pic"},
+                new int[] {R.id.item_id,R.id.item_image });
+        listView.setAdapter(adapter);
+        childDB.close();
 
         createNewChild.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -33,7 +53,6 @@ public class MainActivity extends ActionBarActivity {
             }
 
         });
-
     }
 
 

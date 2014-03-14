@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by matthieu on 13/03/14.
  */
@@ -44,8 +48,9 @@ public class ChildDB {
     public long insertChild(Child child){
         //Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = new ContentValues();
-        //on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+        //on lui ajoute une valeur associée à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(COL_PIC, child.getPicPath());
+
         //on insère l'objet dans la BDD via le ContentValues
         return bdd.insert(TABLE_CHILD, null, values);
     }
@@ -58,15 +63,31 @@ public class ChildDB {
         return bdd.update(TABLE_CHILD, values, COL_ID + " = " +id, null);
     }
 
-    public int removeChildWithID(int id){
+    public int removeChildWithId(int id){
         //Suppression d'un enfant de la BDD grâce à l'ID
         return bdd.delete(TABLE_CHILD, COL_ID + " = " +id, null);
     }
 
-    public Child getChildWithId(int id){
+    public Child getChildWithPicPath(String picPath){
         //Récupère dans un Cursor les valeur correspondant à un enfant contenu dans la BDD (ici on sélectionne le enfant grâce à son titre)
-        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC}, COL_ID + " LIKE \"" + id +"\"", null, null, null, null);
+        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC}, COL_PIC + " LIKE \"" + picPath +"\"", null, null, null, null);
         return cursorToChild(c);
+    }
+
+    public ArrayList<HashMap<String, ?>> getChildren(){
+        ArrayList<HashMap<String, ?>> list = new ArrayList<HashMap<String, ?>>();
+        Cursor c = bdd.rawQuery("select * from table_child",null);
+        System.out.println("cursor : " + c.getCount());
+        while(c.moveToNext()){
+                HashMap<String, Object> temp = new HashMap<String, Object>();
+                temp.put("Id", c.getInt(0));
+                temp.put("Pic", c.getString(1));
+                list.add(temp);
+                System.out.println("id : " + c.getInt(0));
+                System.out.println("pic : " + c.getString(1));
+        }
+
+        return list;
     }
 
     //Cette méthode permet de convertir un cursor en un enfant
@@ -83,9 +104,9 @@ public class ChildDB {
         child.setId(c.getInt(NUM_COL_ID));
         child.setPicPath(c.getString(NUM_COL_PIC));
         //On ferme le cursor
-        c.close();
+        //c.close();
 
-        //On retourne le enfant
+        //On retourne l'enfant
         return child;
     }
 }
