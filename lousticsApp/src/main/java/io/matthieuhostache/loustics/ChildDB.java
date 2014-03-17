@@ -21,6 +21,8 @@ public class ChildDB {
     private static final int NUM_COL_ID = 0;
     private static final String COL_PIC = "PIC";
     private static final int NUM_COL_PIC = 1;
+    private static final String COL_NAME = "NAME";
+    private static final int NUM_COL_NAME = 2;
 
     private SQLiteDatabase bdd;
 
@@ -50,6 +52,7 @@ public class ChildDB {
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associée à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(COL_PIC, child.getPicPath());
+        values.put(COL_NAME, child.getName());
 
         //on insère l'objet dans la BDD via le ContentValues
         return bdd.insert(TABLE_CHILD, null, values);
@@ -60,6 +63,7 @@ public class ChildDB {
         //il faut simple préciser quelle enfant on doit mettre à jour grâce à l'ID
         ContentValues values = new ContentValues();
         values.put(COL_PIC, child.getPicPath());
+        values.put(COL_NAME, child.getName());
         return bdd.update(TABLE_CHILD, values, COL_ID + " = " +id, null);
     }
 
@@ -69,11 +73,24 @@ public class ChildDB {
     }
 
     public Child getChildWithPicPath(String picPath){
-        //Récupère dans un Cursor les valeur correspondant à un enfant contenu dans la BDD (ici on sélectionne le enfant grâce à son titre)
-        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC}, COL_PIC + " LIKE \"" + picPath +"\"", null, null, null, null);
+        //Récupère dans un Cursor les valeurs correspondants à un enfant contenu dans la BDD (ici on sélectionne le enfant grâce à son titre)
+        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC, COL_NAME}, COL_PIC + " LIKE \"" + picPath +"\"", null, null, null, null);
         return cursorToChild(c);
     }
 
+    public Child getChildWithId(int id){
+        //Récupère dans un Cursor les valeurs correspondants à un enfant contenu dans la BDD (ici on sélectionne le enfant grâce à son titre)
+        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC, COL_NAME}, COL_ID + " LIKE \"" + id +"\"", null, null, null, null);
+        return cursorToChild(c);
+    }
+
+    public Child getChildWithName(String name){
+        //Récupère dans un Cursor les valeurs correspondants à un enfant contenu dans la BDD (ici on sélectionne le enfant grâce à son titre)
+        Cursor c = bdd.query(TABLE_CHILD, new String[] {COL_ID, COL_PIC, COL_NAME}, COL_NAME + " LIKE \"" + name +"\"", null, null, null, null);
+        return cursorToChild(c);
+    }
+
+    //Récupère tout les enfants
     public ArrayList<HashMap<String, ?>> getChildren(){
         ArrayList<HashMap<String, ?>> list = new ArrayList<HashMap<String, ?>>();
         Cursor c = bdd.rawQuery("select * from table_child",null);
@@ -82,9 +99,11 @@ public class ChildDB {
                 HashMap<String, Object> temp = new HashMap<String, Object>();
                 temp.put("Id", c.getInt(0));
                 temp.put("Pic", c.getString(1));
+                temp.put("Name", c.getString(2));
                 list.add(temp);
                 System.out.println("id : " + c.getInt(0));
                 System.out.println("pic : " + c.getString(1));
+                System.out.println("Name : " + c.getString(2));
         }
 
         return list;
@@ -103,6 +122,7 @@ public class ChildDB {
         //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
         child.setId(c.getInt(NUM_COL_ID));
         child.setPicPath(c.getString(NUM_COL_PIC));
+        child.setName(c.getString(NUM_COL_NAME));
         //On ferme le cursor
         //c.close();
 

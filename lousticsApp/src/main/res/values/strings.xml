@@ -3,10 +3,11 @@
 
     <string name="app_name">Ecole Des Loustics</string>
     <string name="hello_world">Liste des comptes :</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Paramètres</string>
     <string name="title_activity_add_child">Je créer mon compte</string>
-    <string name="open_camera">Prendre une photo</string>
+    <string name="open_camera">Me prendre en photo</string>
     <string name="create_child">Créer son compte</string>
-    <string name="title_activity_my_space">MySpaceActivity</string>
+    <string name="title_activity_my_space">Mon espace loustic</string>
+    <string name="childName">Comment t\'appelles tu ?</string>
 
 </resources>

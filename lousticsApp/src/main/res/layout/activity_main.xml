@@ -20,17 +20,16 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="fill_parent"
-        android:layout_height="250dp" />
+        android:layout_height="250dp"
+        android:layout_weight="1.04" />
 
-    <ImageButton
-        android:layout_width="175dp"
+
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.05"
-        android:src="@drawable/addchild" />
-
-
+        android:text="Créer son compte"
+        android:id="@+id/addchild"
+        android:layout_gravity="bottom" />
 
 
 </LinearLayout>

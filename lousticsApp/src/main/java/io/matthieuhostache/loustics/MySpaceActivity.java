@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,20 +25,32 @@ import java.util.List;
 public class MySpaceActivity extends ActionBarActivity {
 
     private ImageView childPic;
+    private TextView spaceChildName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_space);
 
-        childPic = (ImageView)findViewById(R.id.childPic);
+        childPic = (ImageView) findViewById(R.id.childPic);
+        spaceChildName = (TextView) findViewById(R.id.spaceChildName);
 
-        String picChild = getIntent().getExtras().getString("picChild");
-        System.out.println("picChild : " + picChild);
+        int childId = getIntent().getExtras().getInt("Id");
 
-        Bitmap image = BitmapFactory.decodeFile(picChild);
+
+
+
+        ChildDB childDB = new ChildDB(this);
+        childDB.open();
+        Child currentChild = childDB.getChildWithId(childId);
+        childDB.close();
+        String child_name = currentChild.getName();
+        System.out.println("child_name : " + child_name);
+        String child_pic = currentChild.getPicPath();
+
+        spaceChildName.setText(child_name);
+        Bitmap image = BitmapFactory.decodeFile(child_pic);
         childPic.setImageBitmap(image);
-
         initCategories();
 
     }

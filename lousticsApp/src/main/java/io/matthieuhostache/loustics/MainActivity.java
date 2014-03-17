@@ -1,9 +1,7 @@
 package io.matthieuhostache.loustics;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,13 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
@@ -26,15 +23,15 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
-    private ImageButton createNewChild;
-    private  ListView listView;
+    private Button createNewChild;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        createNewChild = (ImageButton) findViewById(R.id.imageButton);
+        createNewChild = (Button) findViewById(R.id.addchild);
         listView = (ListView) findViewById(R.id.listView);
 
         List<HashMap<String, ?>> childrenList = new ArrayList<HashMap<String, ?>>();
@@ -44,19 +41,20 @@ public class MainActivity extends ActionBarActivity {
         childrenList.addAll(childDB.getChildren());
         System.out.println("childrenList : "+ childrenList);
 
-        ListAdapter adapter = new SimpleAdapter(this, childrenList, R.layout.view_child, new String[] {"Id","Pic"},
-                new int[] {R.id.item_id,R.id.item_image });
+        ListAdapter adapter = new SimpleAdapter(this, childrenList, R.layout.view_child, new String[] {"Name","Pic"},
+                new int[] {R.id.item_name,R.id.item_image });
         listView.setAdapter(adapter);
         childDB.close();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                HashMap<String, String> map = (HashMap<String, String>) listView.getItemAtPosition(position);
+                HashMap<String, ?> map = (HashMap<String, ?>) listView.getItemAtPosition(position);
 
                 Intent MySpaceActivityIntent = new Intent(MainActivity.this, MySpaceActivity.class);
-                String picChild = map.get("Pic");
-                MySpaceActivityIntent.putExtra("picChild",picChild);
+                int Id = (Integer)map.get("Id");
+                System.out.println("theId :" + Id);
+                MySpaceActivityIntent.putExtra("Id",Id);
                 startActivityForResult(MySpaceActivityIntent, 1);
             }
         });

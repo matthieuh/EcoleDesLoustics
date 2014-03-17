@@ -9,11 +9,23 @@
     tools:context="io.matthieuhostache.loustics.AddChildActivity"
     tools:ignore="MergeRootFrame" >
 
-    <Button
-        android:id="@+id/openCamera"
-        android:layout_width="fill_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/open_camera" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/childName" />
+
+    <EditText
+        android:id="@+id/addChildName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/childName"
+        android:ems="10" android:inputType="text"/>
+
 
     <ImageView
         android:layout_width="fill_parent"
@@ -21,6 +33,12 @@
         android:id="@+id/childPic"
         android:adjustViewBounds="true"
         android:layout_gravity="center_horizontal|top" />
+
+    <Button
+        android:id="@+id/openCamera"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/open_camera" />
 
     <Button
         android:id="@+id/createChild"

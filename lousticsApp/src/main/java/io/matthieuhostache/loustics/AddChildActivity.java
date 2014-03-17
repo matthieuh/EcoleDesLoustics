@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.R.bool;
 
@@ -40,6 +41,7 @@ public class AddChildActivity extends ActionBarActivity {
     private ImageView picture;
     private Button openCamera;
     private Button createChild;
+    private EditText addChildName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class AddChildActivity extends ActionBarActivity {
         openCamera = (Button)findViewById(R.id.openCamera);
         createChild = (Button)findViewById(R.id.createChild);
         picture = (ImageView)findViewById(R.id.childPic);
+        addChildName = (EditText)findViewById(R.id.addChildName);
 
         openCamera.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -68,7 +71,7 @@ public class AddChildActivity extends ActionBarActivity {
     public void createChild(){
         //if (!picFile.getAbsolutePath().equals("")) {
             ChildDB childDB = new ChildDB(this);
-            Child newChild = new Child(picFile.getAbsolutePath());
+            Child newChild = new Child(addChildName.getText().toString(), picFile.getAbsolutePath());
             System.out.println("new child : " + newChild.getPicPath());
             //On ouvre la base de données pour écrire dedans
             childDB.open();
