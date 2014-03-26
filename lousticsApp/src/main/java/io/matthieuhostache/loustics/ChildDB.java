@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ import java.util.List;
  * Created by matthieu on 13/03/14.
  */
 public class ChildDB {
-    private static final int VERSION_BDD = 1;
+    private static final int VERSION_BDD = 3;
     private static final String NOM_BDD = "child.db";
 
     private static final String TABLE_CHILD = "table_child";

@@ -1,6 +1,8 @@
 package io.matthieuhostache.loustics;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -41,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
         childrenList.addAll(childDB.getChildren());
         System.out.println("childrenList : "+ childrenList);
 
-        ListAdapter adapter = new SimpleAdapter(this, childrenList, R.layout.view_child, new String[] {"Name","Pic"},
+        ChildrenListAdapter adapter = new ChildrenListAdapter(this, childrenList, R.layout.view_child, new String[] {"Name","Pic"},
                 new int[] {R.id.item_name,R.id.item_image });
         listView.setAdapter(adapter);
         childDB.close();
@@ -68,7 +70,6 @@ public class MainActivity extends ActionBarActivity {
 
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.matthieuhostache.loustics" >
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:configChanges="orientation|screenSize"
@@ -22,12 +26,19 @@
             android:label="@string/title_activity_add_child" >
         </activity>
 
-        <uses-permission android:name="android.permission.CAMERA" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
         <activity
             android:name="io.matthieuhostache.loustics.MySpaceActivity"
             android:label="@string/title_activity_my_space" >
+        </activity>
+        <activity
+            android:name="io.matthieuhostache.loustics.MatieresActivity"
+            android:label="@string/title_activity_matieres" >
+        </activity>
+        <activity
+            android:name="io.matthieuhostache.loustics.GamesActivity"
+            android:label="@string/title_activity_games" >
         </activity>
     </application>
 

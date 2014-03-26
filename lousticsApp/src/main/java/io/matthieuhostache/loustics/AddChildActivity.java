@@ -1,6 +1,7 @@
 package io.matthieuhostache.loustics;
 
 import android.content.Intent;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -36,12 +37,15 @@ import android.widget.Toast;
 
 
 public class AddChildActivity extends ActionBarActivity {
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
+
     private File picFile;
     private ImageView picture;
     private Button openCamera;
     private Button createChild;
     private EditText addChildName;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class AddChildActivity extends ActionBarActivity {
 
         openCamera.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                takePhoto();
+                dispatchTakePictureIntent();
             }
 
         });
@@ -68,10 +72,81 @@ public class AddChildActivity extends ActionBarActivity {
         });
     }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        System.out.println("new child 2: " + mCurrentPhotoPath);
+        setPic();
+        return image;
+    }
+
+    /*@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            setPic();
+        }
+    }*/
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = picture.getWidth();
+        int targetH = picture.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        picture.setImageBitmap(bitmap);
+    }
+
     public void createChild(){
         //if (!picFile.getAbsolutePath().equals("")) {
             ChildDB childDB = new ChildDB(this);
-            Child newChild = new Child(addChildName.getText().toString(), picFile.getAbsolutePath());
+
+            Child newChild = new Child(addChildName.getText().toString(), mCurrentPhotoPath);
             System.out.println("new child : " + newChild.getPicPath());
             //On ouvre la base de données pour écrire dedans
             childDB.open();
@@ -80,6 +155,8 @@ public class AddChildActivity extends ActionBarActivity {
             //Pour vérifier que l'on a bien créé notre livre dans la BDD
             //on extrait le livre de la BDD grâce au chemin de l'img que l'on a créé précédemment
             Child childFromDb = childDB.getChildWithPicPath(newChild.getPicPath());
+
+
             //Si un livre est retourné (donc si le livre à bien été ajouté à la BDD)
             if(childFromDb != null){
                 //On affiche les infos du livre dans un Toast
@@ -98,45 +175,12 @@ public class AddChildActivity extends ActionBarActivity {
 
     }
 
-    public void displayImage(){
-        Bitmap bitmap = null;
-        bitmap = BitmapFactory.decodeFile(picFile.getAbsolutePath());
-        picture.setImageBitmap(bitmap);
 
-    }
-
-    public void takePhoto(){
-        // L'endroit où sera enregistrée la photo
-        // Remarquez que mFichier est un attribut de ma classe
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        picFile = new File(Environment.getExternalStorageDirectory(), "photo"+timeStamp+".jpg");
-        // On récupère ensuite l'URI associée au fichier
-        Uri fileUri = Uri.fromFile(picFile);
-        // Maintenant, on créer l'intent
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Et on déclare qu'on veut que l'image soit enregistrée là où pointe l'URI
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-                Bitmap image = BitmapFactory.decodeFile(picFile.getAbsolutePath());
-                picture.setImageBitmap(image);
-        }
-
-    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_child, menu);
         return true;
@@ -152,22 +196,6 @@ public class AddChildActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_add_child, container, false);
-            return rootView;
-        }
     }
 
 }

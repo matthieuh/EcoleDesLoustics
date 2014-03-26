@@ -9,5 +9,7 @@
     <string name="create_child">Créer son compte</string>
     <string name="title_activity_my_space">Mon espace loustic</string>
     <string name="childName">Comment t\'appelles tu ?</string>
+    <string name="title_activity_matieres">MatieresActivity</string>
+    <string name="title_activity_games">GamesActivity</string>
 
 </resources>
