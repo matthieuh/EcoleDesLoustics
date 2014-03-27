@@ -1,4 +1,4 @@
-package io.matthieuhostache.loustics;
+package io.matthieuhostache.loustics.games;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
-public class MatieresActivity extends ActionBarActivity {
+import io.matthieuhostache.loustics.R;
+
+public class GamesActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_matieres);
+        setContentView(R.layout.activity_games);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -30,7 +32,7 @@ public class MatieresActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.matieres, menu);
+        getMenuInflater().inflate(R.menu.games, menu);
         return true;
     }
 
@@ -57,7 +59,7 @@ public class MatieresActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_matieres, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_games, container, false);
             return rootView;
         }
     }

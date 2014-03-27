@@ -3,5 +3,15 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.matthieuhostache.loustics.MatieresActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context="io.matthieuhostache.loustics.matieres.MatieresActivity"
+    tools:ignore="MergeRootFrame" >
+
+
+    <ListView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/exercicesList"
+    android:layout_gravity="center_horizontal|bottom" />
+
+
+</FrameLayout>

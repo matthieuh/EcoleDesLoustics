@@ -11,5 +11,6 @@
     <string name="childName">Comment t\'appelles tu ?</string>
     <string name="title_activity_matieres">MatieresActivity</string>
     <string name="title_activity_games">GamesActivity</string>
+    <string name="title_activity_calcul">CalculActivity</string>
 
 </resources>

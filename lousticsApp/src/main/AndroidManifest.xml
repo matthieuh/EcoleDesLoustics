@@ -3,7 +3,8 @@
     package="io.matthieuhostache.loustics" >
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
     <application
@@ -25,20 +26,21 @@
             android:name="io.matthieuhostache.loustics.AddChildActivity"
             android:label="@string/title_activity_add_child" >
         </activity>
-
-
-
         <activity
             android:name="io.matthieuhostache.loustics.MySpaceActivity"
             android:label="@string/title_activity_my_space" >
         </activity>
         <activity
-            android:name="io.matthieuhostache.loustics.MatieresActivity"
+            android:name="io.matthieuhostache.loustics.matieres.MatieresActivity"
             android:label="@string/title_activity_matieres" >
         </activity>
         <activity
-            android:name="io.matthieuhostache.loustics.GamesActivity"
+            android:name="io.matthieuhostache.loustics.games.GamesActivity"
             android:label="@string/title_activity_games" >
+        </activity>
+        <activity
+            android:name="io.matthieuhostache.loustics.matieres.CalculActivity"
+            android:label="@string/title_activity_calcul" >
         </activity>
     </application>
 
