@@ -9,8 +9,18 @@ public class Child {
     private int id;
     private String picPath;
     private String name;
+    private int points;
 
     public Child(){
+        this.points=0;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public String getName() {
@@ -24,6 +34,7 @@ public class Child {
     public Child(String name, String picPath){
         this.name = name;
         this.picPath = picPath;
+        this.points = 0;
     }
 
     public int getId() {

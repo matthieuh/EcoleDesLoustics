@@ -1,6 +1,8 @@
 package io.matthieuhostache.loustics;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.R.bool;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,7 +43,7 @@ public class AddChildActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
-    private File picFile;
+    private File image;
     private ImageView picture;
     private Button openCamera;
     private Button createChild;
@@ -98,55 +101,38 @@ public class AddChildActivity extends ActionBarActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         System.out.println("new child 2: " + mCurrentPhotoPath);
-        setPic();
         return image;
     }
 
-    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            setPic();
+            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            picture.setImageBitmap(imageBitmap);
         }
-    }*/
-
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = picture.getWidth();
-        int targetH = picture.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        picture.setImageBitmap(bitmap);
     }
 
     public void createChild(){
         //if (!picFile.getAbsolutePath().equals("")) {
             ChildDB childDB = new ChildDB(this);
 
-            Child newChild = new Child(addChildName.getText().toString(), mCurrentPhotoPath);
+            //Child newChild = new Child(addChildName.getText().toString(), mCurrentPhotoPath);
+            Child newChild = new Child();
+            newChild.setName(addChildName.getText().toString());
+            if(mCurrentPhotoPath != null && image.length() > 1) {
+                newChild.setPicPath(mCurrentPhotoPath);
+            } else if (image != null) {
+                image.delete();
+            }
+
             System.out.println("new child : " + newChild.getPicPath());
             //On ouvre la base de données pour écrire dedans
             childDB.open();
@@ -154,28 +140,21 @@ public class AddChildActivity extends ActionBarActivity {
             childDB.insertChild(newChild);
             //Pour vérifier que l'on a bien créé notre livre dans la BDD
             //on extrait le livre de la BDD grâce au chemin de l'img que l'on a créé précédemment
-            Child childFromDb = childDB.getChildWithPicPath(newChild.getPicPath());
+            /*Child childFromDb = childDB.getChildWithId(newChild.getId());
 
 
             //Si un livre est retourné (donc si le livre à bien été ajouté à la BDD)
             if(childFromDb != null){
                 //On affiche les infos du livre dans un Toast
                 Toast.makeText(this, childFromDb.toString(), Toast.LENGTH_LONG).show();
-                //On modifie le titre du livre
-                //childFromDb.setTitre("J'ai modifié le titre du livre");
-                //Puis on met à jour la BDD
-                //childDB.updateChild(childFromDb.getId(), childFromDb);
             } else {
                 Toast.makeText(this,"Erreur !", Toast.LENGTH_LONG).show();
-            }
+            }*/
             childDB.close();
-            Intent MainActivityIntent = new Intent(AddChildActivity.this, MainActivity.class);
-            startActivityForResult(MainActivityIntent, 1);
+            finish();
         //}
 
     }
-
-
 
 
     @Override

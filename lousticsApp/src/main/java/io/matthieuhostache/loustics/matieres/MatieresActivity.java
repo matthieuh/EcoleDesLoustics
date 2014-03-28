@@ -26,11 +26,14 @@ import io.matthieuhostache.loustics.games.GamesActivity;
 public class MatieresActivity extends ActionBarActivity {
 
     private ListView exercicesList;
+    private int childId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matieres);
+
+        childId = getIntent().getExtras().getInt("Id");
 
         List<HashMap<String, String>> listExercices = new ArrayList<HashMap<String, String>>();
         exercicesList = (ListView) findViewById(R.id.exercicesList);
@@ -48,6 +51,18 @@ public class MatieresActivity extends ActionBarActivity {
         map.put("img", String.valueOf(R.drawable.ic_launcher));
         listExercices.add(map);
 
+        // un item
+        map = new HashMap<String, String>();
+        map.put("nom", "Multiplication");
+        map.put("img", String.valueOf(R.drawable.ic_launcher));
+        listExercices.add(map);
+
+        // un item
+        map = new HashMap<String, String>();
+        map.put("nom", "Division");
+        map.put("img", String.valueOf(R.drawable.ic_launcher));
+        listExercices.add(map);
+
         ListAdapter adapter = new SimpleAdapter(this, listExercices, R.layout.view_category, new String[] {"nom", "img"},
                 new int[] {R.id.cat_name, R.id.cat_image });
         exercicesList.setAdapter(adapter);
@@ -56,8 +71,12 @@ public class MatieresActivity extends ActionBarActivity {
 
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 HashMap<String, ?> map = (HashMap<String, ?>) exercicesList.getItemAtPosition(position);
-
                 Intent CalculActivityIntent = new Intent(MatieresActivity.this, CalculActivity.class);
+                System.out.println("theId :" + childId);
+                Bundle extras = new Bundle();
+                extras.putInt("Id",childId);
+                extras.putInt("calculType",position);
+                CalculActivityIntent.putExtras(extras);
                 startActivityForResult(CalculActivityIntent, 1);
             }
         });

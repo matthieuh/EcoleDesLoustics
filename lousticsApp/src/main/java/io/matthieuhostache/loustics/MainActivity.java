@@ -1,9 +1,10 @@
 package io.matthieuhostache.loustics;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,39 +15,65 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
+import io.matthieuhostache.loustics.swipedismiss.SwipeDismissListViewTouchListener;
+import io.matthieuhostache.loustics.swipedismiss.SwipeDismissTouchListener;
+
+public class MainActivity extends Activity {
 
     private Button createNewChild;
     private ListView listView;
+    private Context context;
+    private List<HashMap<String, ?>> childrenList = new ArrayList<HashMap<String, ?>>();
+    private ChildrenListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
 
         createNewChild = (Button) findViewById(R.id.addchild);
         listView = (ListView) findViewById(R.id.listView);
 
-        List<HashMap<String, ?>> childrenList = new ArrayList<HashMap<String, ?>>();
-        ChildDB childDB = new ChildDB(this);
+        /*ChildDB childDB = new ChildDB(this);
         childDB.open();
 
-        childrenList.addAll(childDB.getChildren());
-        System.out.println("childrenList : "+ childrenList);
+        childrenList.addAll(childDB.getChildren());*/
 
-        ChildrenListAdapter adapter = new ChildrenListAdapter(this, childrenList, R.layout.view_child, new String[] {"Name","Pic"},
-                new int[] {R.id.item_name,R.id.item_image });
+        adapter = new ChildrenListAdapter(this, childrenList, R.layout.view_child, new String[] {"Name","Pic","Points"},
+                new int[] {R.id.item_name,R.id.item_image,R.id.item_points });
         listView.setAdapter(adapter);
-        childDB.close();
+        /*childDB.close();*/
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        listView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                System.out.println("Dismiss can");
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                System.out.println("Dismiss on");
+                                for (int position : reverseSortedPositions) {
+                                    confirmDelete(adapter, position);
+                                }
+                            }
+                        });
+        listView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        listView.setOnScrollListener(touchListener.makeScrollListener());
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -69,7 +96,52 @@ public class MainActivity extends ActionBarActivity {
             }
 
         });
+
+
     }
+
+    protected void onResume() {
+        super.onResume();
+
+        ChildDB childDB = new ChildDB(this);
+        childDB.open();
+        childrenList.clear();
+        childrenList.addAll(childDB.getChildren());
+        childDB.close();
+
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public void confirmDelete(final ChildrenListAdapter adapter, final int position) {
+        Object item = adapter.getItem(position);
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE: // Yes button clicked
+                        HashMap<String, ?> map = (HashMap<String, ?>) listView.getItemAtPosition(position);
+                        int childId = (Integer)map.get("Id");
+
+                        ChildDB childDB = new ChildDB(context);
+                        childDB.open();
+                        childDB.removeChildWithId(childId);
+                        childDB.close();
+                        childrenList.remove(adapter.getItem(position));
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE: // No button clicked // do nothing
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Es-tu sûr de vouloir supprimer ce loustic ?")
+                .setPositiveButton("Supprimer", dialogClickListener)
+                .setNegativeButton("Annuler", dialogClickListener).show();
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

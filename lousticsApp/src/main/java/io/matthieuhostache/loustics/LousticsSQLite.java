@@ -14,11 +14,13 @@ public class LousticsSQLite extends SQLiteOpenHelper {
     private static final String COL_ID = "ID";
     private static final String COL_PIC = "PIC";
     private static final String COL_NAME = "NAME";
+    private static final String COL_POINTS = "POINTS";
 
     private static final String CREATE_BDD = "CREATE TABLE " + TABLE_CHILD + " ("
             + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + COL_PIC + " TEXT NOT NULL, "
-            + COL_NAME + " TEXT NOT NULL);";
+            + COL_PIC + " TEXT, "
+            + COL_NAME + " TEXT NOT NULL, "
+            + COL_POINTS + " TEXT);";
 
     public LousticsSQLite(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);

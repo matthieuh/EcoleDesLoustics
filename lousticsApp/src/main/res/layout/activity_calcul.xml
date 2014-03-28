@@ -1,115 +1,143 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context="io.matthieuhostache.loustics.matieres.CalculActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame"
+    android:background="@color/ardoise">
 
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronoGa"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="Score : "
+            android:textSize="45dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:id="@+id/score" />
+
+        <TextView
+            android:id="@+id/goodAnswersView"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="45dp"
+            android:textColor="#ffffff"
+            android:layout_alignParentBottom="false"
+            android:layout_toRightOf="@+id/score"
+            android:layout_toEndOf="@+id/score"
+            android:layout_alignBaseline="@+id/score" />
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/linearCalcView"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
 
+        <TextView
+            android:id="@+id/val1"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="60dp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/typeCalcul"
+            android:text="+"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="60dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
 
-            <TextView
-                android:id="@+id/horloge"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/val2"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="60dp" />
 
-            <TextView
-                android:text="Bonnes réponses : "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+        <TextView
+            android:text="="
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="60dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
 
-            <TextView
-                android:id="@+id/goodAnswersView"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearCalcView"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/val1"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:id="@+id/typeCalcul"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:id="@+id/val2"
-                android:text="@string/hello_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:text=" = "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-            <EditText
-                android:id="@+id/result"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/childName"
-                android:ems="10"
-                android:inputType="number"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/endCalcView"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rejouer"
-                android:id="@+id/playAgain"
-                android:layout_gravity="bottom" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Retour au menu"
-                android:id="@+id/backMySpace"
-                android:layout_gravity="bottom" />
-
-        </LinearLayout>
-
-
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/result"
+            android:textSize="60dp"
+            android:textColor="#ffffff" />
 
 
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/horloge"
+        android:text="0.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff1400"
+        android:textSize="45dp"
+        android:layout_below="@+id/chronoGa"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp" />
+
+    <LinearLayout
+        android:id="@+id/endCalcView"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_above="@+id/linearCalcView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Rejouer"
+            android:id="@+id/playAgain"
+            android:layout_gravity="bottom|right" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Retour au menu"
+            android:id="@+id/backMySpace"
+            android:layout_toRightOf="@+id/playAgain" />
+
+    </LinearLayout>
+
+</RelativeLayout>

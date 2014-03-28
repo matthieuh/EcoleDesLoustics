@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent">
 
     <ImageView
@@ -9,7 +10,8 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center_vertical"
-        android:padding="10px"/>
+        android:padding="10px"
+        android:src="@drawable/defaultavatar" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -19,12 +21,30 @@
         android:paddingLeft="10px"
         android:layout_weight="1">
 
+
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:textSize="16px"
+            android:textSize="35px"
             android:textStyle="bold"
             android:id="@+id/item_name" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textSize="16px"
+                android:text="Points : "
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textSize="16px"
+                android:id="@+id/item_points" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -31,21 +31,25 @@ public class MySpaceActivity extends ActionBarActivity {
 
     private ImageView childPic;
     private TextView spaceChildName;
+    private TextView spaceChildPoints;
     private ListView categoriesList;
+    private int childId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_space);
+    }
+
+    protected void onResume() {
+        super.onResume();
 
         childPic = (ImageView) findViewById(R.id.childPic);
         spaceChildName = (TextView) findViewById(R.id.spaceChildName);
+        spaceChildPoints = (TextView) findViewById(R.id.spaceChildPoints);
         categoriesList = (ListView) findViewById(R.id.categoriesList);
 
-
-        int childId = getIntent().getExtras().getInt("Id");
-
-
+        childId = getIntent().getExtras().getInt("Id");
 
 
         ChildDB childDB = new ChildDB(this);
@@ -53,14 +57,17 @@ public class MySpaceActivity extends ActionBarActivity {
         Child currentChild = childDB.getChildWithId(childId);
         childDB.close();
         String child_name = currentChild.getName();
-        System.out.println("child_name : " + child_name);
-        String child_pic = currentChild.getPicPath();
+
+        if(currentChild.getPicPath() != null) {
+            String child_pic = currentChild.getPicPath();
+            Bitmap image = BitmapFactory.decodeFile(child_pic);
+            childPic.setImageBitmap(image);
+        }
 
         spaceChildName.setText(child_name);
-        Bitmap image = BitmapFactory.decodeFile(child_pic);
-        childPic.setImageBitmap(image);
-        initCategories();
+        spaceChildPoints.setText(""+currentChild.getPoints());
 
+        initCategories();
     }
 
     public void initCategories() {
@@ -98,6 +105,8 @@ public class MySpaceActivity extends ActionBarActivity {
                         CatActivityIntent = new Intent(MySpaceActivity.this, GamesActivity.class);
                         break;
                 }
+
+                CatActivityIntent.putExtra("Id",childId);
                 startActivityForResult(CatActivityIntent, 1);
             }
         });

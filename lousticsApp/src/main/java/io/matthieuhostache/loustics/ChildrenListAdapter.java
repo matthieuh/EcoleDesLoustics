@@ -105,19 +105,19 @@ public class ChildrenListAdapter extends SimpleAdapter{
                             setViewImage((ImageView) v, (Integer) data);
                         } else if (data instanceof Bitmap){
                             setViewImage((ImageView) v, (Bitmap)data);
-                        } else {
-                            System.out.println("text : "+ text.substring(5));
-                            Bitmap bmp = BitmapFactory.decodeFile(text.substring(5));
+                        } else if(text != null && !text.isEmpty()) {
+                            System.out.println("text : " + text.substring(5));
+                            Bitmap bmp = BitmapFactory.decodeFile(text);
                             int origWidth = bmp.getWidth();
                             int origHeight = bmp.getHeight();
 
                             final int destWidth = 500;//or the width you need
 
-                            if(origWidth > destWidth){
-                                int destHeight = origHeight/( origWidth / destWidth );
+                            if (origWidth > destWidth) {
+                                int destHeight = origHeight / (origWidth / destWidth);
                                 Bitmap bmpResized = Bitmap.createScaledBitmap(bmp, destWidth, destHeight, false);
                                 ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                                bmpResized.compress(Bitmap.CompressFormat.JPEG,85 , outStream);
+                                bmpResized.compress(Bitmap.CompressFormat.JPEG, 85, outStream);
                                 setViewImage((ImageView) v, bmpResized);
                             } else {
                                 setViewImage((ImageView) v, text);

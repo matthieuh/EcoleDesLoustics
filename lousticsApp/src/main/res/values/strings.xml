@@ -13,4 +13,6 @@
     <string name="title_activity_games">GamesActivity</string>
     <string name="title_activity_calcul">CalculActivity</string>
 
+    <color name="ardoise">#3f552e</color>
+
 </resources>
