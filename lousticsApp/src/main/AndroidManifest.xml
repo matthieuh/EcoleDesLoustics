@@ -42,6 +42,14 @@
             android:name="io.matthieuhostache.loustics.matieres.CalculActivity"
             android:label="@string/title_activity_calcul" >
         </activity>
+        <activity
+            android:name=".games.labyrinthe.LabyrintheActivity"
+            android:label="@string/title_activity_labyrinthe" >
+        </activity>
+        <activity
+            android:name=".games.labyrinthe.LabyrintheGame"
+            android:label="@string/title_activity_labyrinthe_game" >
+        </activity>
     </application>
 
 </manifest>
